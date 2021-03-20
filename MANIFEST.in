@@ -1,0 +1,2 @@
+recursive-include linker/templates *
+recursive-include linker/static *

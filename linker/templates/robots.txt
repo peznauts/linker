@@ -1,0 +1,4 @@
+# Welcome to Linker!
+# robots welcome;
+User-Agent: *
+Disallow:
