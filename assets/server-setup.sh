@@ -10,7 +10,7 @@ python3 -m venv /opt/linker
 
 pip install --upgrade pip
 
-pip install .
+pip install ../
 
 cp linker-uwsgi.ini /opt/linker/
 

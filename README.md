@@ -77,8 +77,8 @@ application deployment.
 
 ## Test Server
 
-A test server can be run by executing the ``runserver.py`` file within the root
-of this repository.
+A test server can be run by executing the ``runserver.py`` file within the ``assets``
+folder within this repository.
 
 ``` shell
 python3 ./runserver.py
@@ -87,3 +87,23 @@ python3 ./runserver.py
 The test server requires a database to run, by default the database used is
 **sqllite**. While sqllite works, external database servers are recommended
 for production workloads.
+
+
+## Building the linker container
+
+Linker can run in a container and a minimal container file is included in this
+repository.
+
+### Building
+
+``` shell
+$ podman build -f Containerfile -t linker
+```
+
+### Running
+
+``` shell
+$ podman run --network=host $CONTAINER_ID
+```
+
+Once running the container will respond on port 5000.

@@ -15,7 +15,7 @@ setuptools.setup(
         'flask',
         'flask-sqlalchemy',
         'sqlalchemy',
-        'pymysql'
+        'pymysql',
     ],
     classifiers = [
         'Development Status :: 5 - Production/Stable',

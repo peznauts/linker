@@ -1,2 +1,3 @@
 recursive-include linker/templates *
 recursive-include linker/static *
+recursive-include assets *
