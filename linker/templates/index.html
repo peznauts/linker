@@ -73,8 +73,18 @@
                         <div class="row">
                             <div class="col">
                                 <div class="collapse multi-collapse" id="multiCollapseExample{{ loop.index }}">
-                                    <div class="card card-body">
-                                        {{ item.1 }}
+                                    <div class="collapse multi-collapse d-flex justify-content-between" id="multiCollapseExample{{ loop.index }}">
+                                        {% set get_link = url_for("get_link", link_id=item.0, _external=True) %}
+                                        <button id="cp_btn{{ loop.index }}" class="btn btn-outline-info" role="button"
+                                                onclick="copy_span('cp_btn{{ loop.index }}', '{{ get_link }}')"
+                                                data-toggle="tooltip" data-placement="bottom"
+                                                title="&#x270D; Click the URL to copy the simplified value into the clipboard."
+                                                value="Copy To Clipboard">
+                                            Copy
+                                        </button>
+                                        <div class="card card-body">
+                                            {{ item.1 }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -118,6 +128,18 @@
                 }, 6000);
           }, false);
       });
+    </script>
+    <script>
+        // Adding event listener whern the "copy to clipboard button is pressed"
+        function copy_span(id_info, text) {
+            var copyText = document.getElementById(id_info);
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("Copy");
+            textArea.remove();
+        }
     </script>
 </footer>
 </html>
