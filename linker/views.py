@@ -48,7 +48,7 @@ def _response_text_format(response, link=None):
     response.headers['Content-Type'] = 'text/plain; charset="utf-8"'
     response.headers = _add_headers(response.headers)
     if link:
-        response.headers['Rendered-Link'] = link
+        response.headers['X-Rendered-Link'] = link
 
     return response
 
@@ -124,18 +124,22 @@ def index():
 def stats():
     """Render the statistics page."""
 
-    return flask.render_template(
-        'index.html',
-        remote_url=request.base_url,
-        count=Link.query.count(),
-        links=[
-            (
-                i.sha1,
-                base64.b64decode(i.content).decode(),
-                i.count
-            ) for i in Link.query.order_by(Link.count.desc()).limit(20)
-        ]
+    response = flask.make_response(
+         flask.render_template(
+            'index.html',
+            remote_url=request.base_url,
+            count=Link.query.count(),
+            links=[
+                (
+                    i.sha1,
+                    base64.b64decode(i.content).decode(),
+                    i.count
+                ) for i in Link.query.order_by(Link.count.desc()).limit(20)
+            ]
+        )
     )
+    response.headers = _add_headers(response.headers)
+    return response
 
 
 @app.route('/<link_id>', methods=['GET', 'HEAD'])
@@ -158,7 +162,7 @@ def get_link(link_id):
             return_headers = {
                 'Referer': request.base_url,
                 'Referrer-Policy': 'unsafe-url',
-                'Link-Used': q.count
+                'X-Link-Used': q.count
             }
             return_headers = _add_headers(headers_obj=return_headers)
 
