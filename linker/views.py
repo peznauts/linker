@@ -29,10 +29,14 @@ def _add_headers(headers_obj):
 
     for key, value in CACHE_HEADERS.items():
         headers_obj[key] = value
+
+    for k, v in app.config['LINKER_DONATE'].items():
+        headers_obj['X-Donate-{}'.format(k)] = v
+
     return headers_obj
 
 
-def _response_format(response, link=None):
+def _response_text_format(response, link=None):
     """Add response headers.
 
     :response: Object
@@ -100,14 +104,14 @@ def index():
             db_session.add(link_item)
             db_session.commit()
 
-        return _response_format(
+        return _response_text_format(
             response=flask.make_response(
                 hashed_link
             ),
             link=hashed_link
         )
 
-    return _response_format(
+    return _response_text_format(
         response=flask.make_response(
             app.config['LINKER_BASIC_USAGE'].format(
                 url=request.base_url.rstrip('/')
@@ -156,7 +160,7 @@ def get_link(link_id):
                 'Referrer-Policy': 'unsafe-url',
                 'Link-Used': q.count
             }
-            return_headers.update(CACHE_HEADERS)
+            return_headers = _add_headers(headers_obj=return_headers)
 
             if request.method == 'GET':
                 q.count += 1
@@ -171,7 +175,7 @@ def get_link(link_id):
 def robots():
     """Return robots response."""
 
-    return _response_format(
+    return _response_text_format(
         response=flask.make_response(
             flask.render_template('robots.txt'),
             200

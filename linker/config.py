@@ -23,6 +23,25 @@ For statistics information visit {url}/stats
 """
 )
 
+# Add-in crypto donation headers to your site
+#
+# LINKER_DONATE = {
+#     'BTC': 'xxx',
+#     'TXZ': 'xxx'
+# }
+#
+# If set to an environment variable, the option is defined as a comma
+# separated k=v pair.
+#
+LINKER_DONATE = os.environ.get('LINKER_DONATE', dict())
+if isinstance(LINKER_DONATE, str):
+    dontate = dict()
+    for item in LINKER_DONATE.split(','):
+        for k, v in item.split('='):
+            dontate[k.strip()] = v.strip()
+    LINKER_DONATE = dontate
+
+
 # Google web analytics. Insert your user IDs using the following constants.
 GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS')
 GOOGLE_ADSENSE = os.environ.get('GOOGLE_ADSENSE')
@@ -34,7 +53,6 @@ SQLALCHEMY_ENGINE_OPTIONS = {
 }
 # Ff you don't override the secret key, one will be chosen for you
 SECRET_KEY = uuid.uuid4().hex
-WTF_CSRF_ENABLED = False
 
 # System options
 SESSION_COOKIE_SECURE=True

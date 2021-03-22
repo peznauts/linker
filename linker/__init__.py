@@ -6,12 +6,6 @@ import flask
 
 app = flask.Flask(__name__, instance_relative_config=True)
 
-settings = [
-    'LINKER_DB'
-    'LINKER_BASIC_USAGE'
-    'GOOGLE_ANALYTICS'
-    'GOOGLE_ADSENSE'
-]
 
 def _app_setup():
     """start the application."""
