@@ -60,25 +60,28 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="container">
-            <div class="container-fluid">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Link ID</th>
-                            <th scope="col">URL</th>
-                            <th scope="col">Used Count</th>
-                        </tr>
-                    </thead>
-                    {% for item in links %}
-                    <tr>
-                        <td><a href="{{ item.1 }}">{{ item.0 }}</a></td>
-                        <td><a href="{{ item.1 }}">{{ item.1 }}</a></td>
-                        <td>{{ item.2 }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <div class="container">
+                <div class="container-fluid">
+                    <div id="accordion">
+                        {% for item in links %}
+                        <p>
+                            <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample{{ loop.index }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample{{ loop.index }}">
+                                <span class="badge badge-light">{{ item.2 }}</span>
+                                {{ item.0 }}
+                            </a>
+                        </p>
+                        <div class="row">
+                            <div class="col">
+                                <div class="collapse multi-collapse" id="multiCollapseExample{{ loop.index }}">
+                                    <div class="card card-body">
+                                        {{ item.1 }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
     </main>
