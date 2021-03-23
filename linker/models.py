@@ -18,7 +18,7 @@ class Link(Base):
     id = Column(Integer, primary_key=True)
     sha1 = Column(String(40), unique=True)
     content = Column(LargeBinary, unique=False)
-    user_agent = Column(String(120), unique=False)
+    user_agent = Column(String(360), unique=False)
     ip = Column(LargeBinary, unique=False)
     count = Column(Integer, unique=False)
 

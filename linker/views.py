@@ -73,13 +73,16 @@ def shutdown_session(*args, **kwargs):  # noqa
 def index():
     """Site Index."""
 
-    link = request.query_string.decode()
-    if link:
+    args = request.query_string.decode()
+    if args:
         # Extract the link
         p = re.compile('link=(.*)')
-        result = p.search(link)
-        link_parse = result.group(1).strip()
-        link_parsed = urllib.parse.urlparse(link_parse)
+        result = p.search(args)
+        try:
+            link_parse = result.group(1).strip()
+            link_parsed = urllib.parse.urlparse(link_parse)
+        except AttributeError:
+            flask.abort(400)
         # If the link provided has no scheme, add a basic one.
         if not link_parsed.scheme:
             link_parse = 'http://' + link_parsed.path
