@@ -29,7 +29,7 @@ setuptools.setup(
         "sqlalchemy",
         "pymysql",
     ],
-    classifiers = [
+    classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Information Technology",
         "Intended Audience :: System Administrators",
