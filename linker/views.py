@@ -1,3 +1,17 @@
+#   Copyright Peznauts <kevin@cloudnull.com>. All Rights Reserved.
+#
+#   Licensed under the Apache License, Version 2.0 (the "License"); you may
+#   not use this file except in compliance with the License. You may obtain
+#   a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#   WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#   License for the specific language governing permissions and limitations
+#   under the License.
+
 import base64
 import hashlib
 import os
@@ -7,9 +21,8 @@ import urllib.parse
 import flask
 from flask import request
 
-from linker import app
-from linker.db import db_session
-from linker.db import db_session
+from linker import APP
+from linker.db import DB_SESSION
 from linker.models import Link
 
 
@@ -30,7 +43,7 @@ def _add_headers(headers_obj):
     for key, value in CACHE_HEADERS.items():
         headers_obj[key] = value
 
-    for k, v in app.config['LINKER_DONATE'].items():
+    for k, v in APP.config['LINKER_DONATE'].items():
         headers_obj['X-Donate-{}'.format(k)] = v
 
     return headers_obj
@@ -62,14 +75,14 @@ def _base64encode(obj):
     return base64.b64encode(str.encode(obj))
 
 
-@app.teardown_appcontext
+@APP.teardown_appcontext
 def shutdown_session(*args, **kwargs):  # noqa
     """Close an SQL session."""
 
-    db_session.remove()
+    DB_SESSION.remove()
 
 
-@app.route('/', methods=['GET'])
+@APP.route('/', methods=['GET'])
 def index():
     """Site Index."""
 
@@ -104,8 +117,8 @@ def index():
                 ip=_base64encode(request.remote_addr),
                 count=0
             )
-            db_session.add(link_item)
-            db_session.commit()
+            DB_SESSION.add(link_item)
+            DB_SESSION.commit()
 
         return _response_text_format(
             response=flask.make_response(
@@ -116,19 +129,19 @@ def index():
 
     return _response_text_format(
         response=flask.make_response(
-            app.config['LINKER_BASIC_USAGE'].format(
+            APP.config['LINKER_BASIC_USAGE'].format(
                 url=request.base_url.rstrip('/')
             )
         )
     )
 
 
-@app.route('/stats', methods=['GET'])
+@APP.route('/stats', methods=['GET'])
 def stats():
     """Render the statistics page."""
 
     response = flask.make_response(
-         flask.render_template(
+        flask.render_template(
             'index.html',
             remote_url=request.base_url,
             count=Link.query.count(),
@@ -145,7 +158,7 @@ def stats():
     return response
 
 
-@app.route('/<link_id>', methods=['GET', 'HEAD'])
+@APP.route('/<link_id>', methods=['GET', 'HEAD'])
 def get_link(link_id):
     """Site link.
 
@@ -171,14 +184,14 @@ def get_link(link_id):
 
             if request.method == 'GET':
                 q.count += 1
-                db_session.commit()
+                DB_SESSION.commit()
 
             return flask.redirect(redirect, code=308), return_headers
         else:
             flask.abort(404)
 
 
-@app.route('/robots.txt', methods=['GET'])
+@APP.route('/robots.txt', methods=['GET'])
 def robots():
     """Return robots response."""
 
@@ -190,13 +203,13 @@ def robots():
     )
 
 
-@app.route('/favicon.ico')
+@APP.route('/favicon.ico')
 def favicon():
     """Return favicon response."""
 
     return flask.send_from_directory(
         os.path.join(
-            app.root_path,
+            APP.root_path,
             'static'
         ),
         'favicon.ico',
