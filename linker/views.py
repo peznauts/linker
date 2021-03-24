@@ -27,8 +27,8 @@ from linker.models import Link
 
 
 CACHE_HEADERS = {
-    'X-Frame-Options': 'SAMEORIGIN',
-    "Cache-Control": 'public, max-age=120'
+    "X-Frame-Options": "SAMEORIGIN",
+    "Cache-Control": "public, max-age=120",
 }
 
 
@@ -43,8 +43,8 @@ def _add_headers(headers_obj):
     for key, value in CACHE_HEADERS.items():
         headers_obj[key] = value
 
-    for k, v in APP.config['LINKER_DONATE'].items():
-        headers_obj['X-Donate-{}'.format(k)] = v
+    for k, v in APP.config["LINKER_DONATE"].items():
+        headers_obj["X-Donate-{}".format(k)] = v
 
     return headers_obj
 
@@ -58,10 +58,10 @@ def _response_text_format(response, link=None):
     :returns: Object
     """
 
-    response.headers['Content-Type'] = 'text/plain; charset="utf-8"'
+    response.headers["Content-Type"] = 'text/plain; charset="utf-8"'
     response.headers = _add_headers(response.headers)
     if link:
-        response.headers['X-Rendered-Link'] = link
+        response.headers["X-Rendered-Link"] = link
 
     return response
 
@@ -82,14 +82,14 @@ def shutdown_session(*args, **kwargs):  # noqa
     DB_SESSION.remove()
 
 
-@APP.route('/', methods=['GET'])
+@APP.route("/", methods=["GET"])
 def index():
     """Site Index."""
 
     args = request.query_string.decode()
     if args:
         # Extract the link
-        p = re.compile('link=(.*)')
+        p = re.compile("link=(.*)")
         result = p.search(args)
         try:
             link_parse = result.group(1).strip()
@@ -98,7 +98,7 @@ def index():
             flask.abort(400)
         # If the link provided has no scheme, add a basic one.
         if not link_parsed.scheme:
-            link_parse = 'http://' + link_parsed.path
+            link_parse = "http://" + link_parsed.path
 
         link_content = _base64encode(link_parse)
 
@@ -115,50 +115,44 @@ def index():
                 sha1=hex_dig,
                 user_agent=request.user_agent.string,
                 ip=_base64encode(request.remote_addr),
-                count=0
+                count=0,
             )
             DB_SESSION.add(link_item)
             DB_SESSION.commit()
 
         return _response_text_format(
-            response=flask.make_response(
-                hashed_link
-            ),
-            link=hashed_link
+            response=flask.make_response(hashed_link), link=hashed_link
         )
 
     return _response_text_format(
         response=flask.make_response(
-            APP.config['LINKER_BASIC_USAGE'].format(
-                url=request.base_url.rstrip('/')
+            APP.config["LINKER_BASIC_USAGE"].format(
+                url=request.base_url.rstrip("/")
             )
         )
     )
 
 
-@APP.route('/stats', methods=['GET'])
+@APP.route("/stats", methods=["GET"])
 def stats():
     """Render the statistics page."""
 
     response = flask.make_response(
         flask.render_template(
-            'index.html',
+            "index.html",
             remote_url=request.base_url,
             count=Link.query.count(),
             links=[
-                (
-                    i.sha1,
-                    base64.b64decode(i.content).decode(),
-                    i.count
-                ) for i in Link.query.order_by(Link.count.desc()).limit(20)
-            ]
+                (i.sha1, base64.b64decode(i.content).decode(), i.count)
+                for i in Link.query.order_by(Link.count.desc()).limit(20)
+            ],
         )
     )
     response.headers = _add_headers(response.headers)
     return response
 
 
-@APP.route('/<link_id>', methods=['GET', 'HEAD'])
+@APP.route("/<link_id>", methods=["GET", "HEAD"])
 def get_link(link_id):
     """Site link.
 
@@ -167,7 +161,7 @@ def get_link(link_id):
 
     try:
         if len(link_id) != 40:
-            raise ValueError('Invalid SHA1')
+            raise ValueError("Invalid SHA1")
         int(link_id, 16)
     except ValueError:
         flask.abort(400)
@@ -176,13 +170,13 @@ def get_link(link_id):
         if q:
             redirect = base64.b64decode(q.content).decode()
             return_headers = {
-                'Referer': request.base_url,
-                'Referrer-Policy': 'unsafe-url',
-                'X-Link-Used': q.count
+                "Referer": request.base_url,
+                "Referrer-Policy": "unsafe-url",
+                "X-Link-Used": q.count,
             }
             return_headers = _add_headers(headers_obj=return_headers)
 
-            if request.method == 'GET':
+            if request.method == "GET":
                 q.count += 1
                 DB_SESSION.commit()
 
@@ -191,27 +185,21 @@ def get_link(link_id):
             flask.abort(404)
 
 
-@APP.route('/robots.txt', methods=['GET'])
+@APP.route("/robots.txt", methods=["GET"])
 def robots():
     """Return robots response."""
 
     return _response_text_format(
-        response=flask.make_response(
-            flask.render_template('robots.txt'),
-            200
-        )
+        response=flask.make_response(flask.render_template("robots.txt"), 200)
     )
 
 
-@APP.route('/favicon.ico')
+@APP.route("/favicon.ico")
 def favicon():
     """Return favicon response."""
 
     return flask.send_from_directory(
-        os.path.join(
-            APP.root_path,
-            'static'
-        ),
-        'favicon.ico',
-        mimetype='image/x-icon'
+        os.path.join(APP.root_path, "static"),
+        "favicon.ico",
+        mimetype="image/x-icon",
     )

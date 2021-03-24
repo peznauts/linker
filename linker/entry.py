@@ -31,4 +31,5 @@ def db_sync():
     """Run DB sync to create the database."""
 
     from linker import db
+
     db.init_db()

@@ -20,16 +20,10 @@ from linker import APP
 
 
 ENGINE = create_engine(
-    APP.config['LINKER_DB'],
-    convert_unicode=True,
-    pool_recycle=1800
+    APP.config["LINKER_DB"], convert_unicode=True, pool_recycle=1800
 )
 DB_SESSION = scoped_session(
-    sessionmaker(
-        autocommit=False,
-        autoflush=False,
-        bind=ENGINE
-    )
+    sessionmaker(autocommit=False, autoflush=False, bind=ENGINE)
 )
 BASE = declarative_base()
 BASE.query = DB_SESSION.query_property()

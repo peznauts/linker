@@ -22,11 +22,11 @@ import uuid
 #                  /etc/linker/linker.conf.py
 #
 # Example: LINKER_DB = 'mysql+pymysql://user:password@database-host/db-name'
-LINKER_DB = os.environ.get('LINKER_DB', 'sqlite:////tmp/linker.db')
+LINKER_DB = os.environ.get("LINKER_DB", "sqlite:////tmp/linker.db")
 
 # Basic on screen return information from the API
 LINKER_BASIC_USAGE = os.environ.get(
-    'LINKER_BASIC_USAGE',
+    "LINKER_BASIC_USAGE",
     """To create a simplified link use the following syntax:
 
 {url}?link=https://peznauts.com
@@ -34,7 +34,7 @@ LINKER_BASIC_USAGE = os.environ.get(
 All returned links respond to GET and HEAD requests.
 
 For statistics information visit {url}/stats
-"""
+""",
 )
 
 # Add-in crypto donation headers to your site
@@ -47,18 +47,18 @@ For statistics information visit {url}/stats
 # If set to an environment variable, the option is defined as a comma
 # separated k=v pair.
 #
-LINKER_DONATE = os.environ.get('LINKER_DONATE', dict())
+LINKER_DONATE = os.environ.get("LINKER_DONATE", dict())
 if isinstance(LINKER_DONATE, str):
     dontate = dict()
-    for item in LINKER_DONATE.split(','):
-        for k, v in item.split('='):
+    for item in LINKER_DONATE.split(","):
+        for k, v in item.split("="):
             dontate[k.strip()] = v.strip()
     LINKER_DONATE = dontate
 
 
 # Google web analytics. Insert your user IDs using the following constants.
-GOOGLE_ANALYTICS = os.environ.get('GOOGLE_ANALYTICS')
-GOOGLE_ADSENSE = os.environ.get('GOOGLE_ADSENSE')
+GOOGLE_ANALYTICS = os.environ.get("GOOGLE_ANALYTICS")
+GOOGLE_ADSENSE = os.environ.get("GOOGLE_ADSENSE")
 
 # Flask-sqlalchemy options
 SQLALCHEMY_ENGINE_OPTIONS = {
@@ -71,4 +71,4 @@ SECRET_KEY = uuid.uuid4().hex
 # System options
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = "Lax"

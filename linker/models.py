@@ -28,7 +28,7 @@ class Link(BASE):
     the originating IP address.
     """
 
-    __tablename__ = 'links'
+    __tablename__ = "links"
     id = Column(Integer, primary_key=True)
     sha1 = Column(String(40), unique=True)
     content = Column(LargeBinary, unique=False)
@@ -36,8 +36,9 @@ class Link(BASE):
     ip = Column(LargeBinary, unique=False)
     count = Column(Integer, unique=False)
 
-    def __init__(self, content=None, sha1=None, user_agent=None, ip=None,
-                 count=None):
+    def __init__(
+        self, content=None, sha1=None, user_agent=None, ip=None, count=None
+    ):
         self.content = content
         self.sha1 = sha1
         self.user_agent = user_agent
@@ -45,4 +46,4 @@ class Link(BASE):
         self.count = count
 
     def __repr__(self):
-        return '<Link %r>' % (self.sha1)
+        return "<Link %r>" % (self.sha1)
