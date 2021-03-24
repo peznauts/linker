@@ -39,7 +39,7 @@ setuptools.setup(
         "Topic :: Utilities",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    entry_points = {
+    entry_points={
         "console_scripts": [
             "linker-debug = linker.entry:start_app_debug",
             "linker-prod = linker.entry:start_app_prod",
