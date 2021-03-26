@@ -93,7 +93,11 @@ def index():
         result = p.search(args)
         try:
             link_parse = result.group(1).strip()
-            link_parsed = urllib.parse.urlparse(link_parse)
+            link_parsed = urllib.parse.urlparse(
+                urllib.parse.unquote(
+                    link_parse  # Ensures the URL is decoded and parsed.
+                )
+            )
         except AttributeError:
             flask.abort(400)
 
