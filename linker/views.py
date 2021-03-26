@@ -96,9 +96,10 @@ def index():
             link_parsed = urllib.parse.urlparse(link_parse)
         except AttributeError:
             flask.abort(400)
+
         # If the link provided has no scheme, add a basic one.
         if not link_parsed.scheme:
-            link_parse = "http://" + link_parsed.path
+            flask.abort(400)
 
         link_content = _base64encode(link_parse)
 
@@ -121,7 +122,7 @@ def index():
             DB_SESSION.commit()
 
         return _response_text_format(
-            response=flask.make_response(hashed_link), link=hashed_link
+            response=flask.make_response(hashed_link, 201), link=hashed_link
         )
 
     return _response_text_format(
@@ -202,4 +203,15 @@ def favicon():
         os.path.join(APP.root_path, "static"),
         "favicon.ico",
         mimetype="image/x-icon",
+    )
+
+
+@APP.route("/api")
+def api():
+    """Return api man page response."""
+
+    return flask.send_from_directory(
+        os.path.join(APP.root_path, "static"),
+        "linker.8",
+        mimetype="text/plain",
     )
