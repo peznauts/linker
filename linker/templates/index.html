@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <!doctype html>
 <html lang="en">
+
 <head>
     {% set canonical_url = remote_url | default('https://links.peznauts.com') %}
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <meta name="HandheldFriendly" content="True" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height, shrink-to-fit=no"" />
+    <meta name="viewport"
+        content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, height=device-height, shrink-to-fit=no"" />
 
-    <meta name="
-        description" content="Link services for humans" />
+    <meta name=" description" content="Link services for humans" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
 
     <meta property="article:publisher" content="https://www.facebook.com/dr.carter.cpu" />
@@ -36,64 +37,78 @@
     <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
     <link href="{{ url_for('static', filename='open-iconic/font/css/open-iconic-bootstrap.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/linker.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ url_for('static', filename='highlight.js/styles/default.min.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='highlight.js/styles/default.min.css') }}" rel="stylesheet"
+        media="screen">
     <link href="{{ url_for('static', filename='loading-btn/loading.css') }}" rel="stylesheet" media="screen">
     <link href="{{ url_for('static', filename='loading-btn/loading-btn.css') }}" rel="stylesheet" media="screen">
     <link href="{{ url_for('static', filename='favicon.ico') }}" rel="shortcut icon">
 </head>
+
 <body>
     <main id="site-main" class="site-main outer" role="main">
-        <header>
-            <legend class="linker-container legend">
-                <a class="text-info" style="text-decoration: none; max-width: 100%;" href="{{ url_for('index') }}">Linker </a>
-                <span class="small text-muted">Services for humans</span>
-            </legend>
-        </header>
-        <div class="container">
-            <div class="text-center">
-                <p class="display-4"><span class="text-info">Linker</span> a simplification server</p>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="card-body">
-                        <h5 class="card-title">Total number of links being served {{ count }}</h5>
-                    </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{{ url_for('stats') }}">
+                <img src="{{ url_for('static', filename='img/favicon.png') }}" width="30" height="30"
+                    class="d-inline-block align-top" alt="">
+                <span class="text-info">Linker</span>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="{{ url_for('index') }}">Home <span
+                            class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="{{ url_for('api') }}">Documentation</a>
                 </div>
             </div>
-            <div class="container">
-                <div class="container-fluid">
-                    <div id="accordion">
-                        {% for item in links %}
-                        <p>
-                            <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample{{ loop.index }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample{{ loop.index }}">
-                                <span class="badge badge-light">{{ item.2 }}</span>
-                                {{ item.0 }}
-                            </a>
-                        </p>
-                        <div class="row">
-                            <div class="col">
-                                <div class="collapse multi-collapse" id="multiCollapseExample{{ loop.index }}">
-                                    <div class="collapse multi-collapse d-flex justify-content-between" id="multiCollapseExample{{ loop.index }}">
-                                        {% set get_link = url_for("get_link", link_id=item.0, _external=True) %}
-                                        <button id="cp_btn{{ loop.index }}" class="btn btn-outline-info" role="button"
-                                                onclick="copy_span('cp_btn{{ loop.index }}', '{{ get_link }}')"
-                                                data-toggle="tooltip" data-placement="bottom"
-                                                title="&#x270D; Click the URL to copy the simplified value into the clipboard."
-                                                value="Copy To Clipboard">
-                                            Copy
-                                        </button>
-                                        <div class="card card-body">
-                                            {{ item.1 }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
+            <form class="form-inline">
+                <input id="simplify-0" class="form-control mr-sm-1" type="simplify" placeholder="Enter URL"
+                    aria-label="simplify">
+                <button class="btn btn-outline-info my-2 my-sm-0" type="submit" onclick="getURL();">Simplify</button>
+            </form>
+        </nav>
+        <div class="pt-5">
+        </div>
+        <div class="row-fluid shadow p-3 mb-5 bg-white rounded">
+            <div class="span9">
+                <p class="lead pt-3 pl-2">
+                    Simplification server, serving <span class="text-info">{{ count }}</span> URLs.
+                </p>
             </div>
         </div>
+        <p class="lead border-bottom pt-5 rounded">
+            Top 15 most accessed <span class="text-info">simplified</span> URLs.
+        </p>
+        <div class="row">
+            {% for item in links %}
+            <div class="span6 ml-4 mr-4">
+                <div id="accordion">
+                    <p>
+                        <a class="btn btn-primary shadow" data-toggle="collapse"
+                            href="#multiCollapseExample{{ loop.index }}" role="button" aria-expanded="false"
+                            aria-controls="multiCollapseExample{{ loop.index }}">
+                            <span class="badge badge-light">{{ item.2 }}</span>
+                            {{ item.0 }}
+                        </a>
+                    </p>
+                    <div class="collapse multi-collapse" id="multiCollapseExample{{ loop.index }}">
+                        <div class="collapse multi-collapse d-flex justify-content-between"
+                            id="multiCollapseExample{{ loop.index }}">
+                            {% set get_link = url_for("get_link", link_id=item.0, _external=True) %}
+                            <button id="cp_btn{{ loop.index }}" class="btn btn-outline-info" role="button"
+                                onclick="copy_span('cp_btn{{ loop.index }}', '{{ get_link }}')" data-toggle="tooltip"
+                                data-placement="bottom"
+                                title="&#x270D; Click the URL to copy the simplified value into the clipboard."
+                                value="Copy To Clipboard">
+                                Copy
+                            </button>
+                            <div class="card card-body">
+                                {{ item.1 }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
     </main>
 </body>
 <footer>
@@ -103,31 +118,31 @@
     <script src="{{ url_for('static', filename='highlight.js/highlight.pack.js') }}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
-    <script data-ad-client='{{ config["GOOGLE_ADSENSE"] }}' async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script data-ad-client='{{ config["GOOGLE_ADSENSE"] }}' async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ config['GOOGLE_ANALYTICS'] }}"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', '{{ config["GOOGLE_ANALYTICS"] }}');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', '{{ config["GOOGLE_ANALYTICS"] }}');
     </script>
-
     <script>
-      $(function(){
-          var twoToneButton = document.querySelector('.twoToneButton');
-          twoToneButton.addEventListener("click", function() {
-              twoToneButton.classList.add('running');
-              twoToneButton.innerHTML = 'Working <div class="ld ld-ring ld-spin"></div>';
-            setTimeout(
-                function  (){
-                    twoToneButton.classList.remove('running');
-                    twoToneButton.setAttribute("style", "width: 175px;");
-                    twoToneButton.innerHTML = "Stalled, click to retry";
-                }, 6000);
-          }, false);
-      });
+        $(function () {
+            var twoToneButton = document.querySelector('.twoToneButton');
+            twoToneButton.addEventListener("click", function () {
+                twoToneButton.classList.add('running');
+                twoToneButton.innerHTML = 'Working <div class="ld ld-ring ld-spin"></div>';
+                setTimeout(
+                    function () {
+                        twoToneButton.classList.remove('running');
+                        twoToneButton.setAttribute("style", "width: 175px;");
+                        twoToneButton.innerHTML = "Stalled, click to retry";
+                    }, 6000);
+            }, false);
+        });
     </script>
     <script>
         // Adding event listener whern the "copy to clipboard button is pressed"
@@ -141,5 +156,15 @@
             textArea.remove();
         }
     </script>
+    <script>
+        function getURL() {
+            var copyText = document.getElementById("simplify-0");
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", "{{ url_for('index') }}?link=" + copyText.value, false);
+            xmlHttp.send(null);
+            alert("The simplified URL: " + xmlHttp.responseText);
+        }
+    </script>
 </footer>
+
 </html>
