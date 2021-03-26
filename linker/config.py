@@ -27,13 +27,13 @@ LINKER_DB = os.environ.get("LINKER_DB", "sqlite:////tmp/linker.db")
 # Basic on screen return information from the API
 LINKER_BASIC_USAGE = os.environ.get(
     "LINKER_BASIC_USAGE",
-    """To create a simplified link for sharing.
+    """Create simplified links for sharing.
 
 Usage: {url}?link=https://peznauts.com
 
 Returns: {url}/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
 
-API information at {url}/api
+USAGE/API/EXECUTION information at {url}/api
 """,
 )
 

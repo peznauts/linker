@@ -1,4 +1,4 @@
-LINKER(8)                                               LINKER(8)
+LINKER(8)                                                                     LINKER(8)
 
 NAME
        linker  -  Application server which provides a simple
@@ -25,7 +25,7 @@ SYNOPSIS
                request be made to simplify the same link.
 
            HEAD
-               Return information on a given resource.
+               Returns information on a given resource.
 
 DESCRIPTION
        Application server which provides a simple return URL for
@@ -34,6 +34,48 @@ DESCRIPTION
 
        This application responds to two HTTP methods, GET and
        HEAD.
+
+EXAMPLES
+       Example usage within a given client or application framework.
+
+       PYTHON
+           >>> import requests
+           >>> payload = {'link': 'https://peznauts.com'}
+           >>> r = requests.get('https://EXAMPLE', params=payload)
+           >>> r.content
+           b'https://EXAMPLE/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544'
+
+       GOLANG
+           >>> package main
+           >>> import (
+           ...    "io/ioutil"
+           ...    "log"
+           ...    "net/http"
+           ...    "net/url"
+           ... )
+           >>> func main() {
+           ...    client := &http.Client{}
+           ...    req, err := http.NewRequest("GET", "https://EXAMPLE", nil)
+           ...    parm := url.Values{}
+           ...    parm.Add("link", "https://peznauts.com")
+           ...    req.URL.RawQuery = parm.Encode()
+           ...    resp, err := client.Do(req)
+           ...    if err != nil {
+           ...       log.Fatalln(err)
+           ...    }
+           ...    body, err := ioutil.ReadAll(resp.Body)
+           ...    if err != nil {
+           ...       log.Fatalln(err)
+           ...    }
+           ...    sb := string(body)
+           ...    log.Printf(sb)
+           ... }
+
+           2021/03/26 14:39:43 https://EXAMPLE/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
+
+       SHELL
+           $ curl https://EXAMPLE?link=https://peznauts.com
+           https://EXAMPLE/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
 
 ENDPOINTS
        /
@@ -179,4 +221,4 @@ IMPLEMENTATION
     Apache License Version 2.0
     <http://www.apache.org/licenses/LICENSE-2.0>
 
-                                                                1
+                                                                                      1

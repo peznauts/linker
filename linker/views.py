@@ -92,12 +92,9 @@ def index():
         p = re.compile("link=(.*)")
         result = p.search(args)
         try:
-            link_parse = result.group(1).strip()
-            link_parsed = urllib.parse.urlparse(
-                urllib.parse.unquote(
-                    link_parse  # Ensures the URL is decoded and parsed.
-                )
-            )
+            # Ensures the URL is decoded and parsed.
+            link_parse = urllib.parse.unquote(result.group(1).strip())
+            link_parsed = urllib.parse.urlparse(link_parse)
         except AttributeError:
             flask.abort(400)
 
@@ -112,6 +109,7 @@ def index():
         hex_dig = hash_object.hexdigest()
         if Link.query.filter(Link.sha1 == hex_dig).first():
             hashed_link = urllib.parse.urljoin(request.base_url, hex_dig)
+            status_code = 200
         else:
             hashed_link = urllib.parse.urljoin(request.base_url, hex_dig)
             # Store in DB
@@ -124,9 +122,11 @@ def index():
             )
             DB_SESSION.add(link_item)
             DB_SESSION.commit()
+            status_code = 201
 
         return _response_text_format(
-            response=flask.make_response(hashed_link, 201), link=hashed_link
+            response=flask.make_response(hashed_link, status_code),
+            link=hashed_link,
         )
 
     return _response_text_format(
