@@ -82,12 +82,16 @@
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.open("GET", "{{ url_for('index') }}?link=" + copyText.value, false);
             xmlHttp.send(null);
-            textArea.value = xmlHttp.responseText;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand("Copy");
-            textArea.remove();
-            alert("The simplified URL: " + xmlHttp.responseText + "\n\nThis has been copied to your clipboard.");
+            if (xmlHttp.status >= 300) {
+                alert(`Error ${xmlHttp.statusText}\n\nCheck link and try again.`);
+            } else {
+                textArea.value = xmlHttp.responseText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("Copy");
+                textArea.remove();
+                alert(`The simplified URL: ${xmlHttp.responseText}\n\nThis has been copied to your clipboard.`);
+            }
         }
     </script>
 </footer>
