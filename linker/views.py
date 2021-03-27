@@ -150,6 +150,7 @@ def stats():
             links=[
                 (i.sha1, base64.b64decode(i.content).decode(), i.count)
                 for i in Link.query.order_by(Link.count.desc()).limit(20)
+                if i.count > 0
             ],
         )
     )
