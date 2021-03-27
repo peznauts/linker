@@ -1,6 +1,6 @@
 <div class="pt-5">
 </div>
-<div class="row-fluid shadow p-3 mb-5 bg-white rounded">
+<div class="row-fluid shadow p-3 mb-5 bg-white rounded-3">
     <div class="span9">
         <p class="lead pt-3 ps-2">
             Simplification server, serving <span class="text-info">{{ count }}</span> URLs.
@@ -12,10 +12,10 @@
 {% else %}
 {% set limit_count=(links | length) %}
 {% endif %}
-<p class="lead border-bottom ps-3 pt-5 rounded">
+<p class="lead border-bottom ps-3 pt-5 rounded-3">
     Top {{ limit_count }} most accessed <span class="text-info">simplified</span> URLs.
 </p>
-<div class="row-fluid font-monospace">
+<div class="row-fluid font-monospace shadow-lg">
     <div class="accordion accordion-flush" id="accordionStats">
         {% for item in links %}
         <div class="accordion-item">
