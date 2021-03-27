@@ -1,0 +1,49 @@
+<div class="pt-5">
+</div>
+<div class="row-fluid shadow p-3 mb-5 bg-white rounded">
+    <div class="span9">
+        <p class="lead pt-3 pl-2">
+            Simplification server, serving <span class="text-info">{{ count }}</span> URLs.
+        </p>
+    </div>
+</div>
+{% if (count | int) < (links | length) %}
+{%   set limit_count = count %}
+{% else %}
+{%   set limit_count = (links | length) %}
+{% endif %}
+<p class="lead border-bottom pl-3 pt-5 rounded">
+    Top {{ limit_count }} most accessed <span class="text-info">simplified</span> URLs.
+</p>
+<div class="row-fluid">
+    {% for item in links %}
+    <div class="span6 ml-4 mr-4">
+        <div id="accordion"  class="text-monospace">
+            <p>
+                <a class="btn btn-primary shadow" data-toggle="collapse"
+                    href="#multiCollapseExample{{ loop.index }}" role="button" aria-expanded="false"
+                    aria-controls="multiCollapseExample{{ loop.index }}">
+                    <span class="badge badge-light">{{ item.2 }}</span>
+                    {{ item.0 }}
+                </a>
+            </p>
+            <div class="collapse multi-collapse" id="multiCollapseExample{{ loop.index }}">
+                <div class="collapse multi-collapse d-flex justify-content-between"
+                    id="multiCollapseExample{{ loop.index }}">
+                    {% set get_link = url_for("get_link", link_id=item.0, _external=True) %}
+                    <button id="cp_btn{{ loop.index }}" class="btn btn-outline-info" role="button"
+                        onclick="copy_span('cp_btn{{ loop.index }}', '{{ get_link }}')" data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="&#x270D; Click the URL to copy the simplified value into the clipboard."
+                        value="Copy To Clipboard">
+                        Copy
+                    </button>
+                    <div class="card card-body">
+                        {{ item.1 }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

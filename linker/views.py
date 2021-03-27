@@ -157,6 +157,20 @@ def stats():
     return response
 
 
+@APP.route("/link", methods=["GET"])
+def link():
+    """Render the link client page."""
+
+    response = flask.make_response(
+        flask.render_template(
+            "index.html",
+            remote_url=request.base_url,
+        )
+    )
+    response.headers = _add_headers(response.headers)
+    return response
+
+
 @APP.route("/<link_id>", methods=["GET", "HEAD"])
 def get_link(link_id):
     """Site link.

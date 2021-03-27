@@ -34,6 +34,8 @@ Usage: {url}?link=https://peznauts.com
 Returns: {url}/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
 
 USAGE/API/EXECUTION information at {url}/api
+
+Web client at {url}/link
 """,
 )
 
