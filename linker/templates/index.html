@@ -29,7 +29,7 @@
     <meta name="twitter:url" content="{{ canonical_url }}" />
     <meta name="twitter:site" content="@cloudnull" />
 
-    <title>linker</title>
+    <title>Linker</title>
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/ico" />
     <link rel="canonical" href="{{ canonical_url }}" />
@@ -74,13 +74,18 @@
                 </p>
             </div>
         </div>
-        <p class="lead border-bottom pt-5 rounded">
-            Top 15 most accessed <span class="text-info">simplified</span> URLs.
+        {% if (count | int) < (links | length) %}
+        {%   set limit_count = count %}
+        {% else %}
+        {%   set limit_count = (links | length) %}
+        {% endif %}
+        <p class="lead border-bottom pl-3 pt-5 rounded">
+            Top {{ limit_count }} most accessed <span class="text-info">simplified</span> URLs.
         </p>
-        <div class="row">
+        <div class="row-fluid">
             {% for item in links %}
             <div class="span6 ml-4 mr-4">
-                <div id="accordion">
+                <div id="accordion"  class="text-monospace">
                     <p>
                         <a class="btn btn-primary shadow" data-toggle="collapse"
                             href="#multiCollapseExample{{ loop.index }}" role="button" aria-expanded="false"
@@ -108,7 +113,6 @@
                 </div>
             </div>
             {% endfor %}
-
     </main>
 </body>
 <footer>
@@ -117,10 +121,11 @@
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='highlight.js/highlight.pack.js') }}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-
+    {% if config["GOOGLE_ADSENSE"] %}
     <script data-ad-client='{{ config["GOOGLE_ADSENSE"] }}' async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
+    {% endif %}
+    {% if config["GOOGLE_ANALYTICS"] %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ config['GOOGLE_ANALYTICS'] }}"></script>
     <script>
@@ -129,6 +134,7 @@
         gtag('js', new Date());
         gtag('config', '{{ config["GOOGLE_ANALYTICS"] }}');
     </script>
+    {% endif %}
     <script>
         $(function () {
             var twoToneButton = document.querySelector('.twoToneButton');
@@ -143,9 +149,6 @@
                     }, 6000);
             }, false);
         });
-    </script>
-    <script>
-        // Adding event listener whern the "copy to clipboard button is pressed"
         function copy_span(id_info, text) {
             var copyText = document.getElementById(id_info);
             var textArea = document.createElement("textarea");
@@ -155,14 +158,18 @@
             document.execCommand("Copy");
             textArea.remove();
         }
-    </script>
-    <script>
         function getURL() {
             var copyText = document.getElementById("simplify-0");
+            var textArea = document.createElement("textarea");
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.open("GET", "{{ url_for('index') }}?link=" + copyText.value, false);
             xmlHttp.send(null);
-            alert("The simplified URL: " + xmlHttp.responseText);
+            textArea.value = xmlHttp.responseText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("Copy");
+            textArea.remove();
+            alert("The simplified URL: " + xmlHttp.responseText + "\n\nThis has been copied to your clipboard.");
         }
     </script>
 </footer>
