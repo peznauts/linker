@@ -30,7 +30,7 @@
                 aria-labelledby="flush-heading{{ loop.index }}" data-bs-parent="#accordionStats">
                 <div class="accordion-body d-flex">
                     {% set get_link = url_for("get_link", link_id=item.0, _external=True) %}
-                    <button id="cp_btn{{ loop.index }}" class="btn btn-outline-success" role="button"
+                    <button id="cp_btn{{ loop.index }}" class="btn btn-outline-dark" role="button"
                         onclick="copy_span('cp_btn{{ loop.index }}', '{{ get_link }}')" data-toggle="tooltip"
                         data-placement="bottom"
                         title="&#x270D; Click to copy the simplified value into the clipboard."
@@ -44,6 +44,14 @@
                         data-placement="bottom"
                         title="&#x270D; Click for more information on the simplified value.">
                         Info
+                    </button>
+                    {% set link_external = url_for("get_link", link_id=item.0) %}
+                    <button id="cp_btn{{ loop.index }}" class="btn btn-outline-success" role="button"
+                        onclick="window.location.href='{{ link_external }}';"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="&#x270D; Click to access this link.">
+                        Go
                     </button>
                     <div class="card card-body font-monospace" style="font-size: 75%;">
                         {{ item.1 }}

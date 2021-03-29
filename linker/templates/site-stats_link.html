@@ -10,25 +10,38 @@
 </div>
 <div class="container">
     <div class="row shadow-lg">
-        <div class="col-sm-3 p-2">
-            <div class="img-thumbnail">
+        <div class="col-sm-3 d-flex align-items-start flex-column mt-2">
+            <div class="p-2 border d-none d-sm-block">
                 <img class="img-fluid d-none d-sm-block"
                     src="{{ qrcode(set_link_external, error_correction='H', icon_img=url_for('static', filename='img/favicon.png', _external=True)) }}">
+            </div>
+            <div class="mt-auto pt-2 pb-4">
+                <button id="cp_btn_go2" class="btn btn-outline-dark" role="button"
+                    onclick="copy_span('cp_btn_go2', '{{ set_link_external }}')" data-toggle="tooltip"
+                    data-placement="bottom" title="&#x270D; Click to copy the simplified value into the clipboard."
+                    value="Copy To Clipboard">
+                    Copy
+                </button>
+                <button id="cp_btn_go1" class="btn btn-outline-success" role="button"
+                    onclick="window.location.href='{{ set_link_external }}';" data-toggle="tooltip"
+                    data-placement="bottom" title="&#x270D; Click to access this link.">
+                    Go
+                </button>
             </div>
         </div>
         <div class="col-sm-9">
             <div class="row">
-                <div class="card">
+                <div class="card p-2">
                     <div class="card-header">
                         Link Information
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive-lg">
+                        <div class="table-responsive-xxxl">
                             <table class="table table-striped">
                                 <tbody class="align-middle">
                                     <tr>
                                         <th scope="row">SHA1</th>
-                                        <td><a href="{{ set_link_external }}">{{ link_id }}</a></td>
+                                        <td>{{ link_id }}</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Access Count</th>
