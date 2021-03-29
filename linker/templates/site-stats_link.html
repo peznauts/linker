@@ -1,0 +1,57 @@
+{% set set_link_external = url_for('get_link', link_id=link_id, _external=True) %}
+<div class="pt-5">
+    <div class="row-fluid shadow p-3 mb-5 bg-white rounded-3">
+        <div class="span9">
+            <p class="lead ps-2">
+                Information on a <span class="text-info">simplified</span> URL
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row shadow-lg">
+        <div class="col-sm-3 p-2">
+            <div class="img-thumbnail">
+                <img class="img-fluid d-none d-sm-block"
+                    src="{{ qrcode(set_link_external, error_correction='H', icon_img=url_for('static', filename='img/favicon.png', _external=True)) }}">
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        Link Information
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive-lg">
+                            <table class="table table-striped">
+                                <tbody class="align-middle">
+                                    <tr>
+                                        <th scope="row">SHA1</th>
+                                        <td><a href="{{ set_link_external }}">{{ link_id }}</a></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Access Count</th>
+                                        <td>{{ used_count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Hashed Content</th>
+                                        <td>{{ content }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Client</th>
+                                        <td>{{ user_agent }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Referral Link</th>
+                                        <td>{{ set_link_external }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

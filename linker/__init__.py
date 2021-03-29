@@ -17,8 +17,11 @@ import logging.handlers
 
 import flask
 
+from flask_qrcode import QRcode
+
 
 APP = flask.Flask(__name__, instance_relative_config=True)
+QRcode(APP)
 
 
 def _app_setup():

@@ -26,6 +26,7 @@ setuptools.setup(
     install_requires=[
         "flask",
         "flask-sqlalchemy",
+        "flask-qrcode",
         "sqlalchemy",
         "pymysql",
     ],

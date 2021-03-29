@@ -75,6 +75,24 @@ def _base64encode(obj):
     return base64.b64encode(str.encode(obj))
 
 
+def _link_id_validate(link_id):
+    """Validate the link ID is appropriate and exists.
+
+    :link_id: String
+
+    :returns: Object
+    """
+    try:
+        if len(link_id) != 40:
+            raise ValueError("Invalid SHA1")
+        int(link_id, 16)
+    except ValueError:
+        flask.abort(400)
+    else:
+        q = Link.query.filter(Link.sha1 == link_id).first()
+        return q
+
+
 @APP.teardown_appcontext
 def shutdown_session(*args, **kwargs):  # noqa
     """Close an SQL session."""
@@ -116,7 +134,7 @@ def index():
             link_item = Link(
                 content=link_content,
                 sha1=hex_dig,
-                user_agent=request.user_agent.string,
+                user_agent=_base64encode(request.user_agent.string),
                 ip=_base64encode(request.remote_addr),
                 count=0,
             )
@@ -158,6 +176,32 @@ def stats():
     return response
 
 
+@APP.route("/stats/<link_id>", methods=["GET"])
+def stats_link(link_id):
+    """Render the link stats client page."""
+
+    q = _link_id_validate(link_id=link_id)
+    if q:
+        try:
+            user_agent = base64.b64decode(q.user_agent).decode()
+        except base64.binascii.Error:
+            user_agent = q.user_agent
+
+        response = flask.make_response(
+            flask.render_template(
+                "index.html",
+                link_id=link_id,
+                used_count=q.count,
+                content=base64.b64decode(q.content).decode(),
+                user_agent=user_agent,
+            )
+        )
+        response.headers = _add_headers(response.headers)
+        return response
+    else:
+        flask.abort(404)
+
+
 @APP.route("/link", methods=["GET"])
 def link():
     """Render the link client page."""
@@ -179,30 +223,24 @@ def get_link(link_id):
     :link_id: String
     """
 
-    try:
-        if len(link_id) != 40:
-            raise ValueError("Invalid SHA1")
-        int(link_id, 16)
-    except ValueError:
-        flask.abort(400)
+    q = _link_id_validate(link_id=link_id)
+    if q:
+        redirect = base64.b64decode(q.content).decode()
+        return_headers = {
+            "Referer": request.base_url,
+            "Referrer-Policy": "unsafe-url",
+            "X-Link-Used": q.count,
+        }
+        return_headers = _add_headers(headers_obj=return_headers)
+
+        if request.method == "GET":
+            q.count += 1
+            DB_SESSION.commit()
+
+        return flask.redirect(redirect, code=308), return_headers
+
     else:
-        q = Link.query.filter(Link.sha1 == link_id).first()
-        if q:
-            redirect = base64.b64decode(q.content).decode()
-            return_headers = {
-                "Referer": request.base_url,
-                "Referrer-Policy": "unsafe-url",
-                "X-Link-Used": q.count,
-            }
-            return_headers = _add_headers(headers_obj=return_headers)
-
-            if request.method == "GET":
-                q.count += 1
-                DB_SESSION.commit()
-
-            return flask.redirect(redirect, code=308), return_headers
-        else:
-            flask.abort(404)
+        flask.abort(404)
 
 
 @APP.route("/robots.txt", methods=["GET"])
