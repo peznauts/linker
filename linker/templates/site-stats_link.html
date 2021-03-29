@@ -16,13 +16,13 @@
                     src="{{ qrcode(set_link_external, error_correction='H', icon_img=url_for('static', filename='img/favicon.png', _external=True)) }}">
             </div>
             <div class="mt-auto pt-2 pb-4">
-                <button id="cp_btn_go2" class="btn btn-outline-dark" role="button"
+                <button id="cp_btn_go2" class="btn btn-outline-dark" role="button" style="width: 75px;"
                     onclick="copy_span('cp_btn_go2', '{{ set_link_external }}')" data-toggle="tooltip"
                     data-placement="bottom" title="&#x270D; Click to copy the simplified value into the clipboard."
                     value="Copy To Clipboard">
                     Copy
                 </button>
-                <button id="cp_btn_go1" class="btn btn-outline-success" role="button"
+                <button id="cp_btn_go1" class="btn btn-outline-success" role="button" style="width: 75px;"
                     onclick="window.location.href='{{ set_link_external }}';" data-toggle="tooltip"
                     data-placement="bottom" title="&#x270D; Click to access this link.">
                     Go
