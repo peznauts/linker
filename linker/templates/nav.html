@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #36434d;">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url_for('stats') }}">
             <img src="{{ url_for('static', filename='img/favicon.png') }}" width="32" height="32"
@@ -12,16 +12,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-item nav-link active" href="{{ url_for('index') }}">Home</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-item nav-link" href="{{ url_for('api') }}">Documentation</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-item nav-link" href="{{ url_for('link') }}">Web Client</a>
+                    <a class="{{ 'nav-item nav-link active' if request.endpoint == 'link' else 'nav-item nav-link' }}" href="{{ url_for('link') }}">Web Client</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-item nav-link" href="{{ url_for('stats') }}">Link Statistics</a>
+                    <a class="{{ 'nav-item nav-link active' if request.endpoint == 'stats' else 'nav-item nav-link' }}" href="{{ url_for('stats') }}">Link Statistics</a>
                 </li>
             </ul>
             {% if 'link' != request.endpoint %}

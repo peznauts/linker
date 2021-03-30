@@ -105,7 +105,14 @@ def index():
     """Site Index."""
 
     args = request.query_string.decode()
-    if args:
+
+    if (
+        request.user_agent.browser
+        and not args
+        and request.content_type != "text/plain"
+    ):
+        return flask.redirect(flask.url_for("link"), code=308)
+    elif args:
         # Extract the link
         p = re.compile("link=(.*)")
         result = p.search(args)
@@ -146,14 +153,14 @@ def index():
             response=flask.make_response(hashed_link, status_code),
             link=hashed_link,
         )
-
-    return _response_text_format(
-        response=flask.make_response(
-            APP.config["LINKER_BASIC_USAGE"].format(
-                url=request.base_url.rstrip("/")
+    else:
+        return _response_text_format(
+            response=flask.make_response(
+                APP.config["LINKER_BASIC_USAGE"].format(
+                    url=request.base_url.rstrip("/")
+                )
             )
         )
-    )
 
 
 @APP.route("/stats", methods=["GET"])

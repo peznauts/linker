@@ -1,9 +1,10 @@
 <div class="container-fluid">
-    <div class="pt-5 row">
-        <p class="h6 col-md-4 offset-md-1 mb-5 ms-5 pt-5">
+    <div class="container">
+    <div class="pt-5 row justify-content-between">
+        <p class="h6 col-md-4 offset-md-1 pt-5">
             How does Linker work?
         </p>
-        <blockquote class="mx-0 blockquote text-end fst-italic col-md-6 offset-md-5">
+        <blockquote class="mx-0 blockquote text-end fst-italic col-md-6">
             <p class="mb-4 lead" style="font-size: 80%;">
                 The <code>GET</code> method retrieves information identified by the
                 Request-URI. If the Request-URI refers to a <code>link</code>, the hashed data is
@@ -13,20 +14,23 @@
                 <span class="badge bg-secondary">TL;DR</span> Enter link, Simplify, Share, Repeat
             </p>
             <footer class="blockquote-footer" style="font-size: 60%;">
-                Thank you <a href="https://tools.ietf.org/html/rfc2616#section-9.3"> RFC2616 </a><cite
+                Thank you <a class="link-info" href="https://tools.ietf.org/html/rfc2616#section-9.3"> RFC2616 </a><cite
                     title="GET Method">GET
                     Method</cite>
             </footer>
         </blockquote>
     </div>
-    <div class="row-fluid shadow p-3 mb-5 bg-white rounded-3">
-        <div class="span9">
-            <span class="lead">Enter link to be <span class="text-info">Simplified</span></span>
-            <form class="form-group mt-2">
-                <input id="simplify-0" class="form-control me-1" type="url" placeholder="Simplification Starts Here"
-                    aria-label="simplify">
-                <button class="btn btn-outline-info my-2" type="submit" onclick="getURL();">Simplify</button>
-            </form>
+</div>
+    <div class="container">
+        <div class="row-fluid shadow p-3 mb-5 bg-white rounded-3">
+            <div class="span9">
+                <span class="lead">Enter link to be <span class="text-info">Simplified</span></span>
+                <form class="form-group mt-2">
+                    <input id="simplify-0" class="form-control me-1" type="url" placeholder="Simplification Starts Here"
+                        aria-label="simplify">
+                    <button class="btn btn-outline-info my-2" type="submit" onclick="getURL();">Simplify</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

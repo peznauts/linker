@@ -85,6 +85,15 @@ ENDPOINTS
            specified the contents of the argument is validated
            and hashed.
 
+           The index will interrogate the request to see the
+           request type. If the request is made from a browser
+           without arguments, and the `content_type` isn't set
+           to "text/plain" the index will redirect the request to
+           the web-client. This processing is done to ensure a
+           good user experience for browser based requests, while
+           also ensuring that the API experience for application
+           based workflows isn't impacted.
+
        /<link_id>
            When using a GET request this endpoint will lookup and
            redirect to a hashed URL.
