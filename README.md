@@ -88,22 +88,57 @@ The test server requires a database to run, by default the database used is
 **sqllite**. While sqllite works, external database servers are recommended
 for production workloads.
 
+----
 
-## Building the linker container
+## Containerization
 
-Linker can run in a container and a minimal container file is included in this
-repository.
+This repository publishes automatically publishes a container for easy
+consumption. The container used with Linker is built on a UBI base images
+and are made to run very lean.
 
-### Building
+### Building the linker container
+
+Linker can run in a container and a UBI-minimal container file is included in
+this repository.
+
+#### Building
 
 ``` shell
 $ podman build -f Containerfile -t linker
 ```
 
-### Running
+#### Pull Container
+
+Container images for the latest Linker builds are automatically published on
+various registries.
+
+##### Github
+
+``` shell
+podman login https://docker.pkg.github.com -u $USERNAME
+podman pull docker.pkg.github.com/peznauts/linker/linker:main
+```
+
+##### Quay.io
+
+``` shell
+$ podman pull quay.io/peznauts/linker
+```
+
+##### Docker Hub
+
+``` shell
+$ docker pull peznauts/linker
+```
+
+#### Running
+
+Once you have the container on the system, running it is simple.
 
 ``` shell
 $ podman run --network=host $CONTAINER_ID
 ```
 
-Once running the container will respond on port 5000.
+> For deployment customization, please review the available environment variables.
+
+Once running, the container will respond on port `5000`.
