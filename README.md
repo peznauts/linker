@@ -4,6 +4,9 @@ Linker a service for URL simplification.
 
 The hashing server responds to two methods, GET and HEAD.
 
+More in-depth documentation can be seen [here](linker/static/linker.8).
+
+----
 
 ## Create a simplified link
 
@@ -66,6 +69,7 @@ Server: Werkzeug/1.0.1 Python/3.8.7
 Date: Sat, 20 Mar 2021 18:03:42 GMT
 ```
 
+----
 
 ## Server setup
 
@@ -73,7 +77,6 @@ This application is a python installable and can be deployed in an almost
 endless number of ways. For the purpose of example, the simple script
 `server-setup.sh` can be used to deploy the application or derive ideas on the
 application deployment.
-
 
 ## Test Server
 
@@ -139,6 +142,14 @@ Once you have the container on the system, running it is simple.
 $ podman run --network=host $CONTAINER_ID
 ```
 
-> For deployment customization, please review the available environment variables.
+When running in production it is highly recommended that Linker be setup with
+an external database. This can be defined using an environment variable within
+the container runtime.
+
+``` shell
+$ podman run --network=host -e LINKER_DB='mysql+pymysql://user:password@database-host/db-name' $CONTAINER_ID
+```
+
+> For deployment customization, please review the available environment variables; [Documentation](linker/static/linker.8)
 
 Once running, the container will respond on port `5000`.
