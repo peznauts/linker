@@ -274,8 +274,20 @@ def favicon():
 def api():
     """Return api man page response."""
 
-    return flask.send_from_directory(
-        os.path.join(APP.root_path, "static"),
-        "linker.8",
-        mimetype="text/plain",
-    )
+
+    if (
+        request.user_agent.browser
+        and request.content_type != "text/plain"
+    ):
+        return flask.make_response(
+            flask.render_template(
+                "index.html",
+                remote_url=request.base_url,
+            )
+        )
+    else:
+        return flask.send_from_directory(
+            os.path.join(APP.root_path, "static"),
+            "linker.8",
+            mimetype="text/plain",
+        )

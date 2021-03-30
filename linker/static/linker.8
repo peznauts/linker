@@ -1,7 +1,7 @@
 LINKER(8)                                                                     LINKER(8)
 
 NAME
-       linker  -  Application server which provides a simple
+       linker - Application server which provides a simple
        return URL for hashed content. Linker return a SHA1
        response for all simplified URLs.
 
@@ -14,11 +14,11 @@ SYNOPSIS
                Creating an a SHA1 resource requires the use of
                the `link` argument in the request URL.
 
-                   /?link=https://peznauts.com
+                   {{ remote_url }}?link=https://peznauts.com
 
                return information will be the following
 
-                   /be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
+                   {{ remote_url }}/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
 
                Because the hashing algorithm is SHA1 the return
                data will always remain consistent should another
@@ -41,9 +41,9 @@ EXAMPLES
        PYTHON
            >>> import requests
            >>> payload = {'link': 'https://peznauts.com'}
-           >>> r = requests.get('https://EXAMPLE', params=payload)
+           >>> r = requests.get('{{ remote_url }}', params=payload)
            >>> r.content
-           b'https://EXAMPLE/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544'
+           b'{{ remote_url }}/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544'
 
        GOLANG
            >>> package main
@@ -55,7 +55,7 @@ EXAMPLES
            ... )
            >>> func main() {
            ...    client := &http.Client{}
-           ...    req, err := http.NewRequest("GET", "https://EXAMPLE", nil)
+           ...    req, err := http.NewRequest("GET", "{{ remote_url }}", nil)
            ...    parm := url.Values{}
            ...    parm.Add("link", "https://peznauts.com")
            ...    req.URL.RawQuery = parm.Encode()
@@ -71,11 +71,11 @@ EXAMPLES
            ...    log.Printf(sb)
            ... }
 
-           2021/03/26 14:39:43 https://EXAMPLE/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
+           2021/03/26 14:39:43 {{ remote_url }}/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
 
        SHELL
-           $ curl https://EXAMPLE?link=https://peznauts.com
-           https://EXAMPLE/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
+           $ curl {{ remote_url }}?link=https://peznauts.com
+           {{ remote_url }}/be9b8fc6fc5057a7d18c7b6245e3eee2dc5bd544
 
 ENDPOINTS
        /
@@ -231,9 +231,9 @@ AUTHOR
        Kevin Carter (kevin@cloudnull.com)
 
 IMPLEMENTATION
-    Python, version 3.7+
-    Copyright (C) 2021 Peznauts.
-    Apache License Version 2.0
-    <http://www.apache.org/licenses/LICENSE-2.0>
+       Python, version 3.7+
+       Copyright (C) 2021 Peznauts.
+       Apache License Version 2.0
+       <http://www.apache.org/licenses/LICENSE-2.0>
 
                                                                                       1

@@ -12,7 +12,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-item nav-link" href="{{ url_for('api') }}">Documentation</a>
+                    <a class="{{ 'nav-item nav-link active' if request.endpoint == 'api' else 'nav-item nav-link' }}" href="{{ url_for('api') }}">Documentation</a>
                 </li>
                 <li class="nav-item">
                     <a class="{{ 'nav-item nav-link active' if request.endpoint == 'link' else 'nav-item nav-link' }}" href="{{ url_for('link') }}">Web Client</a>
@@ -23,9 +23,9 @@
             </ul>
             {% if 'link' != request.endpoint %}
             <form class="d-flex justify-content-end">
-                <input id="simplify-0" class="form-control me-1" type="url" placeholder="Enter URL"
+                <input id="simplify-0" class="form-control form-control-sm me-1" type="url" placeholder="Enter URL"
                     aria-label="simplify">
-                <button class="btn btn-outline-info my-2" type="submit" onclick="getURL();">Simplify</button>
+                <button class="btn btn-outline-info" type="submit" onclick="getURL();">Simplify</button>
             </form>
             {% endif %}
         </div>

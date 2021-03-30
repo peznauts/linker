@@ -1,0 +1,10 @@
+{% set remote_url = url_for('index', _external=True).strip('/') %}
+<div class="container pt-3">
+    <div class="row-fluid shadow-lg">
+        <div class="card overflow-auto">
+            <pre class="card-body mx-auto ">
+{% include 'linker.8' %}
+            </pre>
+        </div>
+    </div>
+</div>
