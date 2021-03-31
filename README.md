@@ -136,10 +136,28 @@ $ docker pull peznauts/linker
 
 #### Running
 
-Once you have the container on the system, running it is simple.
+Once you have the container on the system, running it is simple. On the first
+run you will need to initialize the database. This can be done using the
+special `LINKER_INIT` environment variable.
 
 ``` shell
-$ podman run --network=host $CONTAINER_ID
+$ podman run --network=host \
+             --env LINKER_INIT=true \
+             --volume /tmp/linker.db:/tmp/linker.db \
+             $CONTAINER_ID
+```
+
+> In the init example, there's a bind-mount for the sqlite (default) db file.
+  This is done for data persistance when running local testing. In a production
+  environment when using an external database, the linker.db volume is not
+  needed.
+
+``` shell
+$ podman run --network=host \
+             --volume /tmp/linker.db:/tmp/linker.db \
+             --detach \
+             --name linker \
+             $CONTAINER_ID
 ```
 
 When running in production it is highly recommended that Linker be setup with
@@ -147,9 +165,14 @@ an external database. This can be defined using an environment variable within
 the container runtime.
 
 ``` shell
-$ podman run --network=host -e LINKER_DB='mysql+pymysql://user:password@database-host/db-name' $CONTAINER_ID
+$ podman run --network=host \
+             --env LINKER_DB='mysql+pymysql://user:password@database-host/db-name' \
+             --detach \
+             --name linker \
+             $CONTAINER_ID
 ```
 
-> For deployment customization, please review the available environment variables; [Documentation](linker/static/linker.8)
+> For deployment customization, please review the available environment
+  variables; [Documentation](linker/static/linker.8)
 
 Once running, the container will respond on port `5000`.

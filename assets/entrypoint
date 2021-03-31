@@ -14,18 +14,19 @@
 #   under the License.
 
 if [[ "${LINKER_INIT:-false}" = true ]]; then
-  /linker/bin/linker-db-sync
+    /linker/bin/linker-db-sync
+else
+    /linker/bin/uwsgi --enable-threads \
+                      --no-threads-wait \
+                      --plugin=python3 \
+                      --chdir=/linker \
+                      --module=linker:APP \
+                      --processes=4 \
+                      --threads=2 \
+                      --virtualenv=/linker \
+                      --socket=:5000 \
+                      --protocol=http \
+                      --vacuum \
+                      --die-on-term \
+                      --master
 fi
-
-/linker/bin/uwsgi --enable-threads \
-                  --plugin=python3 \
-                  --chdir=/linker \
-                  --module=linker:APP \
-                  --processes=4 \
-                  --threads=2 \
-                  --virtualenv=/linker \
-                  --socket=:5000 \
-                  --protocol=http \
-                  --vacuum \
-                  --die-on-term \
-                  --master
