@@ -193,6 +193,8 @@ def stats_link(link_id):
             user_agent = base64.b64decode(q.user_agent).decode()
         except base64.binascii.Error:
             user_agent = q.user_agent
+        except UnicodeDecodeError:
+            user_agent = 'UNKNOWN'
 
         response = flask.make_response(
             flask.render_template(
